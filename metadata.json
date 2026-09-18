@@ -1,0 +1,6 @@
+{
+  "name": "GUE Staff Management & ID Verification System",
+  "description": "Enterprise staff management, institutional ID card generation, and real-time cryptographic QR verification for GUE Educational Limited Skills Training Centre.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
