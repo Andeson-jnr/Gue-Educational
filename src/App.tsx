@@ -164,7 +164,7 @@ export default function App() {
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
           {currentTab === 'dashboard' && (
-            <Dashboard onNavigate={handleNavigate} settings={settings} />
+            <Dashboard onNavigate={handleNavigate} settings={settings} userRole={currentUser?.role} />
           )}
 
           {currentTab === 'staff' && (

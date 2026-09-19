@@ -9,7 +9,7 @@
       "createdAt": "2026-01-10T08:00:00.000Z",
       "isActive": true,
       "passwordHash": "$2b$10$sycdYYFMSMvjo5dYhyhnu.uF7SML.DekcrrO1f6ScJESwx3nvQyXu",
-      "lastLogin": "2026-09-18T10:40:26.145Z"
+      "lastLogin": "2026-09-19T12:33:31.931Z"
     },
     {
       "id": "usr-2",
@@ -20,7 +20,7 @@
       "createdAt": "2026-01-11T09:30:00.000Z",
       "isActive": true,
       "passwordHash": "$2b$10$sycdYYFMSMvjo5dYhyhnu.GEVz5d0UT7SZavYfoZfvkEF84IP4QM.",
-      "lastLogin": "2026-09-18T10:33:15.175Z"
+      "lastLogin": "2026-09-19T12:33:32.083Z"
     },
     {
       "id": "usr-3",
@@ -30,7 +30,8 @@
       "role": "HR_ADMIN",
       "createdAt": "2026-01-12T10:00:00.000Z",
       "isActive": true,
-      "passwordHash": "$2b$10$sycdYYFMSMvjo5dYhyhnu..hC0TP6G9MuTqNn/ja37PuFFeBJW.9C"
+      "passwordHash": "$2b$10$sycdYYFMSMvjo5dYhyhnu..hC0TP6G9MuTqNn/ja37PuFFeBJW.9C",
+      "lastLogin": "2026-09-19T12:33:32.213Z"
     },
     {
       "id": "usr-4",
@@ -40,8 +41,8 @@
       "role": "VIEWER",
       "createdAt": "2026-02-01T08:30:00.000Z",
       "isActive": true,
-      "passwordHash": "$2b$10$sycdYYFMSMvjo5dYhyhnu.c7vzYq4kqo2RdQH1XaesBl/cnGQ98Eq",
-      "lastLogin": "2026-09-18T13:40:57.301Z"
+      "passwordHash": "$2b$10$hJRLHC7boBYep/2lzRZG2.71qppisIrWRqVATpEUYdVISDHFj37ju",
+      "lastLogin": "2026-09-19T12:33:32.349Z"
     }
   ],
   "departments": [
@@ -516,6 +517,56 @@
     }
   ],
   "auditLogs": [
+    {
+      "adminId": "usr-4",
+      "adminName": "Patience A. Doshima",
+      "adminRole": "VIEWER",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821212350-348a",
+      "timestamp": "2026-09-19T12:33:32.350Z"
+    },
+    {
+      "adminId": "usr-3",
+      "adminName": "Victoria N. Chenge",
+      "adminRole": "HR_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821212214-wacg",
+      "timestamp": "2026-09-19T12:33:32.214Z"
+    },
+    {
+      "adminId": "usr-2",
+      "adminName": "Engr. Moses A. Kper",
+      "adminRole": "DIRECTOR",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821212084-h4pw",
+      "timestamp": "2026-09-19T12:33:32.084Z"
+    },
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821211935-8fua",
+      "timestamp": "2026-09-19T12:33:31.935Z"
+    },
+    {
+      "adminId": "usr-4",
+      "adminName": "Patience A. Doshima",
+      "adminRole": "VIEWER",
+      "action": "FAILED LOGIN",
+      "details": "Failed password verification for user viewer",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821196895-si9p",
+      "timestamp": "2026-09-19T12:33:16.896Z"
+    },
     {
       "adminId": "usr-5",
       "adminName": "Patience A. Doshima",

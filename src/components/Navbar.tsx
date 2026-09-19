@@ -25,6 +25,13 @@ export const Navbar: React.FC<NavbarProps> = ({
     VIEWER: 'bg-slate-100 text-slate-800 border-slate-200',
   };
 
+  const roleLabels: Record<string, string> = {
+    SUPER_ADMIN: 'SUPER ADMIN',
+    HR_ADMIN: 'HR/ADMIN',
+    DIRECTOR: 'DIRECTOR',
+    VIEWER: 'VIEWER',
+  };
+
   const logoSrc = settings?.logoUrl || '/gue_logo.jpg';
 
   return (
@@ -92,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     roleColors[user.role] || 'bg-slate-100 text-slate-800'
                   }`}
                 >
-                  {user.role.replace('_', ' ')}
+                  {roleLabels[user.role] || user.role}
                 </span>
               </div>
 

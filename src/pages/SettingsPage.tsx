@@ -31,6 +31,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
   const [restoreText, setRestoreText] = useState('');
 
   const isSuperAdmin = userRole === 'SUPER_ADMIN';
+  const canEditSettings = ['SUPER_ADMIN', 'DIRECTOR'].includes(userRole);
 
   useEffect(() => {
     api.getSettings().then((res) => setSettings(res.settings)).catch(() => {});
@@ -307,7 +308,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           </div>
         </div>
 
-        {isSuperAdmin && (
+        {canEditSettings && (
           <div className="flex justify-end">
             <button
               id="btn-save-settings"

@@ -345,6 +345,13 @@ apiRouter.post('/auth/users', authenticateToken, requireRoles(['SUPER_ADMIN']), 
     return res.status(400).json({ error: 'Missing required administrator fields.' });
   }
 
+  const allowedRoles: Role[] = ['SUPER_ADMIN', 'DIRECTOR', 'HR_ADMIN', 'VIEWER'];
+  if (!allowedRoles.includes(role)) {
+    return res.status(400).json({
+      error: `Invalid role specified. Allowed roles: ${allowedRoles.join(', ')}`,
+    });
+  }
+
   if (db.findUserByUsername(username)) {
     return res.status(400).json({ error: 'Username or email already exists.' });
   }
@@ -380,7 +387,15 @@ apiRouter.patch('/auth/users/:id', authenticateToken, requireRoles(['SUPER_ADMIN
   const { role, isActive, password, fullName } = req.body;
 
   const updates: any = {};
-  if (role) updates.role = role;
+  if (role) {
+    const allowedRoles: Role[] = ['SUPER_ADMIN', 'DIRECTOR', 'HR_ADMIN', 'VIEWER'];
+    if (!allowedRoles.includes(role)) {
+      return res.status(400).json({
+        error: `Invalid role specified. Allowed roles: ${allowedRoles.join(', ')}`,
+      });
+    }
+    updates.role = role;
+  }
   if (typeof isActive === 'boolean') updates.isActive = isActive;
   if (fullName) updates.fullName = fullName;
   if (password && password.trim().length >= 6) {
@@ -921,7 +936,7 @@ apiRouter.get('/departments', authenticateToken, (req: Request, res: Response) =
 apiRouter.post(
   '/departments',
   authenticateToken,
-  requireRoles(['SUPER_ADMIN', 'DIRECTOR']),
+  requireRoles(['SUPER_ADMIN', 'DIRECTOR', 'HR_ADMIN']),
   (req: AuthRequest, res: Response) => {
     const { name, code, headOfDepartment, description } = req.body;
     if (!name || !code) {
@@ -1057,7 +1072,7 @@ apiRouter.post(
 apiRouter.delete(
   '/documents/:docId',
   authenticateToken,
-  requireRoles(['SUPER_ADMIN', 'HR_ADMIN']),
+  requireRoles(['SUPER_ADMIN', 'DIRECTOR', 'HR_ADMIN']),
   (req: AuthRequest, res: Response) => {
     const { docId } = req.params;
     const success = db.deleteDocument(docId);

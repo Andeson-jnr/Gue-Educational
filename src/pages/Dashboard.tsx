@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api.js';
-import { Staff, Department, SystemSettings } from '../types/index.js';
+import { Staff, Department, SystemSettings, Role } from '../types/index.js';
 import {
   Users,
   UserCheck,
@@ -22,9 +22,10 @@ import {
 interface DashboardProps {
   onNavigate: (tab: any, params?: any) => void;
   settings?: SystemSettings | null;
+  userRole?: Role;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ onNavigate, settings }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ onNavigate, settings, userRole = 'VIEWER' }) => {
   const [stats, setStats] = useState<any>(null);
   const [verificationStats, setVerificationStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -85,14 +86,16 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate, settings }) =>
 
         {/* Quick Action Buttons */}
         <div className="flex flex-wrap items-center gap-2.5">
-          <button
-            id="dash-btn-add-staff"
-            onClick={() => onNavigate('new-staff')}
-            className="flex items-center space-x-2 bg-[#c59b27] hover:bg-[#b0881e] text-slate-950 font-bold text-xs px-4 py-2.5 rounded-lg shadow-sm transition"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>+ Add Staff</span>
-          </button>
+          {['SUPER_ADMIN', 'DIRECTOR', 'HR_ADMIN'].includes(userRole) && (
+            <button
+              id="dash-btn-add-staff"
+              onClick={() => onNavigate('new-staff')}
+              className="flex items-center space-x-2 bg-[#c59b27] hover:bg-[#b0881e] text-slate-950 font-bold text-xs px-4 py-2.5 rounded-lg shadow-sm transition"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>+ Add Staff</span>
+            </button>
+          )}
 
           <button
             id="dash-btn-id-cards"

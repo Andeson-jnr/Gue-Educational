@@ -100,14 +100,14 @@ function getSeedData(): DatabaseSchema {
       passwordHash: bcrypt.hashSync('HRAdmin@GUE2026!', salt),
     },
     {
-      id: 'usr-5',
-      username: 'auditor',
-      email: 'auditor@gue.edu.ng',
+      id: 'usr-4',
+      username: 'viewer',
+      email: 'viewer@gue.edu.ng',
       fullName: 'Patience A. Doshima',
       role: 'VIEWER',
       createdAt: '2026-02-01T08:30:00.000Z',
       isActive: true,
-      passwordHash: bcrypt.hashSync('Auditor@GUE2026!', salt),
+      passwordHash: bcrypt.hashSync('Viewer@GUE2026!', salt),
     },
   ];
 
@@ -561,10 +561,28 @@ class Database {
       if (fs.existsSync(DB_FILE)) {
         const raw = fs.readFileSync(DB_FILE, 'utf-8');
         const parsed = JSON.parse(raw);
-        // Guarantee all top-level keys and remove any registrar user
-        const loadedUsers = (parsed.users || []).filter(
-          (u: any) => u.role !== 'REGISTRAR' && u.username?.toLowerCase() !== 'registrar'
+        // Guarantee all top-level keys and remove any legacy registrar or auditor users
+        let loadedUsers = (parsed.users || []).filter(
+          (u: any) =>
+            u.role !== 'REGISTRAR' &&
+            u.username?.toLowerCase() !== 'registrar' &&
+            u.role !== 'AUDITOR' &&
+            u.username?.toLowerCase() !== 'auditor'
         );
+        // Ensure standard viewer user is present among remaining roles
+        if (!loadedUsers.some((u: any) => u.username === 'viewer')) {
+          const salt = bcrypt.genSaltSync(10);
+          loadedUsers.push({
+            id: 'usr-4',
+            username: 'viewer',
+            email: 'viewer@gue.edu.ng',
+            fullName: 'Patience A. Doshima',
+            role: 'VIEWER',
+            createdAt: '2026-02-01T08:30:00.000Z',
+            isActive: true,
+            passwordHash: bcrypt.hashSync('Viewer@GUE2026!', salt),
+          });
+        }
         const loadedSettings: SystemSettings = {
           ...DEFAULT_SETTINGS,
           ...(parsed.settings || {}),

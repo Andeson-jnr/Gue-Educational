@@ -44,9 +44,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpenMobile,
   onCloseMobile,
 }) => {
-  const isSuperAdmin = userRole === 'SUPER_ADMIN';
-  const isDirectorOrHR = ['SUPER_ADMIN', 'DIRECTOR', 'HR_ADMIN'].includes(userRole);
-  const canViewAudit = ['SUPER_ADMIN', 'DIRECTOR'].includes(userRole);
+  const roleDisplayNames: Record<Role, string> = {
+    SUPER_ADMIN: 'SUPER ADMIN',
+    HR_ADMIN: 'HR/ADMIN',
+    DIRECTOR: 'DIRECTOR',
+    VIEWER: 'VIEWER',
+  };
+
+  const roleColors: Record<Role, string> = {
+    SUPER_ADMIN: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+    DIRECTOR: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    HR_ADMIN: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    VIEWER: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+  };
 
   const navItems = [
     {
@@ -187,8 +197,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        {/* Bottom logout area */}
-        <div className="p-4 border-t border-slate-800">
+        {/* Bottom logout and role area */}
+        <div className="p-4 border-t border-slate-800 space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-500">Access Level</span>
+            <span
+              className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded border ${
+                roleColors[userRole] || 'bg-slate-500/20 text-slate-300 border-slate-500/30'
+              }`}
+            >
+              {roleDisplayNames[userRole] || userRole}
+            </span>
+          </div>
+
           <button
             id="sidebar-btn-logout"
             onClick={onLogout}

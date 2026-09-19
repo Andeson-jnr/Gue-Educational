@@ -169,14 +169,14 @@ export const Login: React.FC<LoginProps> = ({
                 onClick={() => handleQuickFill('hr_admin', 'HRAdmin@GUE2026!')}
                 className="p-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 rounded font-semibold text-center transition"
               >
-                HR Admin
+                HR/Admin
               </button>
               <button
                 type="button"
-                onClick={() => handleQuickFill('auditor', 'Auditor@GUE2026!')}
+                onClick={() => handleQuickFill('viewer', 'Viewer@GUE2026!')}
                 className="p-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800 rounded font-semibold text-center transition"
               >
-                Auditor
+                Viewer
               </button>
             </div>
           </div>
