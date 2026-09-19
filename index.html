@@ -9,6 +9,23 @@
     <meta property="og:description" content="Enterprise staff management, institutional ID card generation, and real-time cryptographic QR verification for GUE Educational Limited Skills Training Centre." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      // Gracefully prevent benign websocket connection errors from triggering UI error toasts
+      window.addEventListener('unhandledrejection', function (event) {
+        var reason = event && (event.reason || event);
+        var msg = (reason && (reason.message || (typeof reason === 'string' ? reason : ''))) || '';
+        if (
+          typeof msg === 'string' &&
+          (msg.indexOf('WebSocket closed without opened') !== -1 ||
+           msg.indexOf('[vite] failed to connect to websocket') !== -1)
+        ) {
+          event.preventDefault();
+          if (event.stopImmediatePropagation) {
+            event.stopImmediatePropagation();
+          }
+        }
+      }, true);
+    </script>
   </head>
   <body>
     <div id="root"></div>

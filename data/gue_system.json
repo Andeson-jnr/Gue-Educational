@@ -9,7 +9,7 @@
       "createdAt": "2026-01-10T08:00:00.000Z",
       "isActive": true,
       "passwordHash": "$2b$10$sycdYYFMSMvjo5dYhyhnu.uF7SML.DekcrrO1f6ScJESwx3nvQyXu",
-      "lastLogin": "2026-09-19T12:33:31.931Z"
+      "lastLogin": "2026-09-19T12:51:44.271Z"
     },
     {
       "id": "usr-2",
@@ -20,7 +20,7 @@
       "createdAt": "2026-01-11T09:30:00.000Z",
       "isActive": true,
       "passwordHash": "$2b$10$sycdYYFMSMvjo5dYhyhnu.GEVz5d0UT7SZavYfoZfvkEF84IP4QM.",
-      "lastLogin": "2026-09-19T12:33:32.083Z"
+      "lastLogin": "2026-09-19T12:46:36.244Z"
     },
     {
       "id": "usr-3",
@@ -31,7 +31,7 @@
       "createdAt": "2026-01-12T10:00:00.000Z",
       "isActive": true,
       "passwordHash": "$2b$10$sycdYYFMSMvjo5dYhyhnu..hC0TP6G9MuTqNn/ja37PuFFeBJW.9C",
-      "lastLogin": "2026-09-19T12:33:32.213Z"
+      "lastLogin": "2026-09-19T12:46:36.376Z"
     },
     {
       "id": "usr-4",
@@ -42,7 +42,7 @@
       "createdAt": "2026-02-01T08:30:00.000Z",
       "isActive": true,
       "passwordHash": "$2b$10$hJRLHC7boBYep/2lzRZG2.71qppisIrWRqVATpEUYdVISDHFj37ju",
-      "lastLogin": "2026-09-19T12:33:32.349Z"
+      "lastLogin": "2026-09-19T12:46:39.547Z"
     }
   ],
   "departments": [
@@ -517,6 +517,116 @@
     }
   ],
   "auditLogs": [
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789822304274-4vxt",
+      "timestamp": "2026-09-19T12:51:44.274Z"
+    },
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789822027915-8gww",
+      "timestamp": "2026-09-19T12:47:07.915Z"
+    },
+    {
+      "adminId": "ANONYMOUS",
+      "adminName": "wronguser",
+      "adminRole": "VIEWER",
+      "action": "FAILED LOGIN",
+      "details": "Failed login attempt for non-existent identifier: wronguser",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789822001394-q7ig",
+      "timestamp": "2026-09-19T12:46:41.394Z"
+    },
+    {
+      "adminId": "usr-4",
+      "adminName": "Patience A. Doshima",
+      "adminRole": "VIEWER",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821999548-euut",
+      "timestamp": "2026-09-19T12:46:39.548Z"
+    },
+    {
+      "adminId": "usr-4",
+      "adminName": "Patience A. Doshima",
+      "adminRole": "VIEWER",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821996504-e1k2",
+      "timestamp": "2026-09-19T12:46:36.504Z"
+    },
+    {
+      "adminId": "usr-3",
+      "adminName": "Victoria N. Chenge",
+      "adminRole": "HR_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821996377-bo9g",
+      "timestamp": "2026-09-19T12:46:36.377Z"
+    },
+    {
+      "adminId": "usr-2",
+      "adminName": "Engr. Moses A. Kper",
+      "adminRole": "DIRECTOR",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821996245-2nn2",
+      "timestamp": "2026-09-19T12:46:36.245Z"
+    },
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821996113-qk45",
+      "timestamp": "2026-09-19T12:46:36.113Z"
+    },
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821993900-7mxi",
+      "timestamp": "2026-09-19T12:46:33.900Z"
+    },
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821853351-m9sr",
+      "timestamp": "2026-09-19T12:44:13.351Z"
+    },
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789821777110-ewvi",
+      "timestamp": "2026-09-19T12:42:57.110Z"
+    },
     {
       "adminId": "usr-4",
       "adminName": "Patience A. Doshima",

@@ -14,10 +14,20 @@ async function startServer() {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+  // CORS & Preflight handling
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+    next();
+  });
+
   // Security HTTP Headers
   app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('X-XSS-Protection', '1; mode=block');
     next();
   });
@@ -37,7 +47,7 @@ async function startServer() {
   app.use('/api', apiRouter);
 
   // Terminate any unmatched /api routes with JSON 404 so they NEVER fall through to Vite SPA index.html
-  app.all('/api/*', (req, res) => {
+  app.all(['/api', '/api/*'], (req, res) => {
     res.status(404).json({
       error: `API route not found: ${req.method} ${req.originalUrl}`,
     });
@@ -52,9 +62,16 @@ async function startServer() {
   });
 
   // Vite middleware for development vs static files for production
-  if (process.env.NODE_ENV !== 'production') {
+  const isProduction =
+    process.env.NODE_ENV === 'production' ||
+    Boolean(process.argv[1]?.includes('dist'));
+
+  if (!isProduction) {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: false,
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);

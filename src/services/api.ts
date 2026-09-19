@@ -77,7 +77,16 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
         authStorage.clear();
         window.dispatchEvent(new CustomEvent('gue:unauthorized'));
       }
-      throw new Error(`Server error (${response.status}): ${response.statusText || 'Endpoint unavailable'}`);
+      // Extract informative error message from HTML if present
+      let extractedMessage = response.statusText;
+      const titleMatch = text.match(/<title>(.*?)<\/title>/i);
+      const h1Match = text.match(/<h1>(.*?)<\/h1>/i);
+      if (titleMatch?.[1]) {
+        extractedMessage = titleMatch[1].trim();
+      } else if (h1Match?.[1]) {
+        extractedMessage = h1Match[1].trim();
+      }
+      throw new Error(`Server error (${response.status}): ${extractedMessage || 'Endpoint or service unavailable'}`);
     }
     throw new Error('Unexpected response format received from server.');
   }
