@@ -9,7 +9,7 @@
       "createdAt": "2026-01-10T08:00:00.000Z",
       "isActive": true,
       "passwordHash": "$2b$10$sycdYYFMSMvjo5dYhyhnu.uF7SML.DekcrrO1f6ScJESwx3nvQyXu",
-      "lastLogin": "2026-09-19T12:51:44.271Z"
+      "lastLogin": "2026-09-19T12:59:16.034Z"
     },
     {
       "id": "usr-2",
@@ -517,6 +517,46 @@
     }
   ],
   "auditLogs": [
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789822756037-12om",
+      "timestamp": "2026-09-19T12:59:16.037Z"
+    },
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789822720744-5lpz",
+      "timestamp": "2026-09-19T12:58:40.744Z"
+    },
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 127.0.0.1",
+      "ipAddress": "127.0.0.1",
+      "id": "alog-1789822717925-pfxi",
+      "timestamp": "2026-09-19T12:58:37.925Z"
+    },
+    {
+      "adminId": "usr-1",
+      "adminName": "Dr. Terseer G. Uba",
+      "adminRole": "SUPER_ADMIN",
+      "action": "ADMIN LOGIN",
+      "details": "Administrator logged into institutional portal from 105.127.17.248",
+      "ipAddress": "105.127.17.248",
+      "id": "alog-1789822423398-fgcc",
+      "timestamp": "2026-09-19T12:53:43.398Z"
+    },
     {
       "adminId": "usr-1",
       "adminName": "Dr. Terseer G. Uba",

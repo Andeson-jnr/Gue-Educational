@@ -39,7 +39,7 @@ export const authStorage = {
   },
 };
 
-async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+async function request<T>(endpoint: string, options: RequestInit = {}, retries = 4, delay = 1000): Promise<T> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string> || {}),
@@ -57,6 +57,10 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       headers,
     });
   } catch (err: any) {
+    if (retries > 0) {
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return request<T>(endpoint, options, retries - 1, delay * 1.5);
+    }
     throw new Error(err.message || 'Network connection failed. Please check server connectivity.');
   }
 
@@ -70,14 +74,18 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       data = null;
     }
   } else {
-    // Received non-JSON response (e.g., HTML fallback or server error page)
+    // Received non-JSON response (e.g., HTML fallback or server warmup page)
     const text = await response.text();
+    if ((response.status === 404 || response.status === 502 || response.status === 503 || response.status === 504 || text.includes('warmup') || text.includes('Please wait')) && retries > 0) {
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return request<T>(endpoint, options, retries - 1, delay * 1.5);
+    }
+
     if (!response.ok) {
       if (response.status === 401 && !endpoint.includes('/api/auth/login')) {
         authStorage.clear();
         window.dispatchEvent(new CustomEvent('gue:unauthorized'));
       }
-      // Extract informative error message from HTML if present
       let extractedMessage = response.statusText;
       const titleMatch = text.match(/<title>(.*?)<\/title>/i);
       const h1Match = text.match(/<h1>(.*?)<\/h1>/i);
@@ -92,6 +100,11 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   }
 
   if (!response.ok) {
+    if ((response.status === 502 || response.status === 503 || response.status === 504) && retries > 0) {
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return request<T>(endpoint, options, retries - 1, delay * 1.5);
+    }
+
     if (response.status === 401 && !endpoint.includes('/api/auth/login')) {
       authStorage.clear();
       window.dispatchEvent(new CustomEvent('gue:unauthorized'));

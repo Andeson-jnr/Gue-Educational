@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Staff, SystemSettings } from '../types/index.js';
-import { ShieldCheck, QrCode, Printer, Download, ExternalLink, CheckCircle } from 'lucide-react';
+import { QrCode, Printer, Download, ExternalLink } from 'lucide-react';
 import jsPDF from 'jspdf';
 
 interface IdCardProps {
@@ -21,11 +21,9 @@ export const IdCard: React.FC<IdCardProps> = ({
   const cardRef = useRef<HTMLDivElement>(null);
 
   const orgName = settings?.orgName || 'GUE EDUCATIONAL LIMITED';
-  const rc = settings?.orgRc || 'RC: 9451933';
-  const tin = settings?.orgTin || 'TIN: 2620760246226';
-  const trainingCentre = settings?.trainingCentreName || 'GUE Educational Limited Skills Training Centre';
-  const address = settings?.address || 'Wannune, Tarka LGA, Benue State, Nigeria';
-  const cardNotice = settings?.cardFooterNotice || 'Property of GUE Educational Limited. If found, please return to Wannune, Tarka LGA, Benue State.';
+  const address = settings?.address || 'Former Chief Magistrate Court, Behind Township hall, Tse Gyer Strt, Wannune Tarka LGA';
+  const phone = settings?.phone || '08103769128';
+  const email = settings?.email || 'support@guevte.com';
 
   const handlePrint = () => {
     window.print();
@@ -39,102 +37,150 @@ export const IdCard: React.FC<IdCardProps> = ({
     });
 
     // Page 1: Front
-    doc.setFillColor(15, 58, 93); // Navy header
-    doc.rect(0, 0, 85.6, 12, 'F');
+    doc.setFillColor(30, 58, 138); // Deep blue header
+    doc.rect(0, 0, 85.6, 14, 'F');
 
-    // Emblem in header
-    const logoImg = settings?.logoUrl;
+    const logoImg = settings?.logoUrl || '/gue_logo.jpg';
     if (logoImg) {
       try {
-        const format = logoImg.includes('image/png') ? 'PNG' : 'JPEG';
-        doc.addImage(logoImg, format, 3, 1.5, 9, 9);
+        doc.addImage(logoImg, 'JPEG', 2, 2, 10, 10);
       } catch {
-        // Continue cleanly if cross-origin or relative URI without canvas
+        // Fallback
       }
     }
 
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
     doc.setFont('helvetica', 'bold');
-    doc.text(orgName, 42.8, 5, { align: 'center' });
+    doc.text('GUE EDUCATIONAL LIMITED', 44, 4, { align: 'center' });
 
-    doc.setFontSize(6);
-    doc.setFont('helvetica', 'normal');
-    doc.text(trainingCentre, 42.8, 8.5, { align: 'center' });
-    doc.text('STAFF IDENTITY CARD', 42.8, 11, { align: 'center' });
-
-    // Gold accent divider
-    doc.setFillColor(197, 155, 39);
-    doc.rect(0, 12, 85.6, 1, 'F');
-
-    // Content
-    doc.setTextColor(15, 58, 93);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'bold');
-    const fullName = `${staff.firstName} ${staff.middleName ? staff.middleName + ' ' : ''}${staff.lastName}`.toUpperCase();
-    doc.text(fullName, 32, 20);
-
-    doc.setFontSize(7);
-    doc.setTextColor(60, 60, 60);
-    doc.text(staff.designation, 32, 24);
-    doc.text(staff.departmentName || 'Skills Training Centre', 32, 28);
-
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(15, 58, 93);
-    doc.text(`ID: ${staff.staffId}`, 32, 33);
-    doc.setFontSize(6);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Token: ${staff.verificationToken || 'GUE-AUTH'}`, 32, 37);
-    doc.text(`Status: ${staff.employmentStatus}`, 32, 41);
-
-    // QR on PDF if available
-    if (qrDataUrl) {
-      try {
-        doc.addImage(qrDataUrl, 'PNG', 62, 16, 20, 20);
-      } catch (e) {
-        // Fallback text
-        doc.rect(62, 16, 20, 20);
-      }
-    }
-
-    // Footer bar
-    doc.setFillColor(15, 58, 93);
-    doc.rect(0, 49, 85.6, 5, 'F');
-    doc.setTextColor(255, 255, 255);
     doc.setFontSize(5);
-    doc.text(`${rc} | ${tin}`, 42.8, 52.5, { align: 'center' });
+    doc.setFont('helvetica', 'italic');
+    doc.text('... A subsidiary of Gue Group Limited', 44, 7.5, { align: 'center' });
+
+    doc.setFillColor(220, 38, 38); // Red divider
+    doc.rect(14, 9.5, 60, 0.5, 'F');
+
+    doc.setFontSize(5);
+    doc.setFont('helvetica', 'bold');
+    doc.text('TRAINING • KNOWLEDGE • EMPOWERMENT', 44, 12.5, { align: 'center' });
+
+    // STAFF ID CARD pill
+    doc.setFillColor(30, 58, 138);
+    doc.roundedRect(26, 15, 33.6, 3.5, 1, 1, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(6);
+    doc.text('STAFF ID CARD', 43, 17.5, { align: 'center' });
+
+    // Passport Photo box placeholder
+    doc.setDrawColor(150, 150, 150);
+    doc.roundedRect(6, 20, 22, 28, 1, 1, 'S');
+    doc.setFontSize(5);
+    doc.setTextColor(100, 100, 100);
+    doc.text('PASSPORT', 17, 33, { align: 'center' });
+    doc.text('PHOTO', 17, 36, { align: 'center' });
+
+    // Staff photo if available
+    if (staff.photoUrl) {
+      try {
+        doc.addImage(staff.photoUrl, 'JPEG', 6, 20, 22, 28);
+      } catch {
+        // Fallback
+      }
+    }
+
+    // Details text
+    doc.setTextColor(30, 58, 138);
+    doc.setFontSize(6.5);
+    doc.setFont('helvetica', 'bold');
+
+    const fullName = `${staff.firstName} ${staff.middleName ? staff.middleName + ' ' : ''}${staff.lastName}`.toUpperCase();
+
+    doc.text('STAFF NAME:', 31, 23);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(20, 20, 20);
+    doc.text(fullName, 31, 27);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 58, 138);
+    doc.text('STAFF ID:', 31, 31);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(20, 20, 20);
+    doc.text(staff.staffId, 50, 31);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 58, 138);
+    doc.text('DEPARTMENT:', 31, 35);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(20, 20, 20);
+    doc.text(staff.departmentName || 'General Administration', 52, 35);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 58, 138);
+    doc.text('DESIGNATION:', 31, 39);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(20, 20, 20);
+    doc.text(staff.designation || 'Staff', 52, 39);
+
+    // Front Footer bar
+    doc.setFillColor(30, 58, 138);
+    doc.rect(0, 50, 85.6, 3.98, 'F');
 
     // Page 2: Back
     doc.addPage([85.6, 53.98], 'landscape');
 
-    doc.setFillColor(15, 58, 93);
-    doc.rect(0, 0, 85.6, 8, 'F');
+    doc.setFillColor(30, 58, 138);
+    doc.rect(0, 0, 85.6, 10, 'F');
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(7);
+    doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');
-    doc.text('STAFF ID VERIFICATION & CONDITIONS', 42.8, 5, { align: 'center' });
+    doc.text('COMPANY DETAILS', 42.8, 6.5, { align: 'center' });
 
-    doc.setTextColor(40, 40, 40);
-    doc.setFontSize(5.5);
-    doc.setFont('helvetica', 'normal');
-    doc.text('1. This card certifies that the bearer is a recognised staff member.', 5, 13);
-    doc.text('2. Scan the official QR code to verify live employment validity.', 5, 17);
-    doc.text('3. If this record is inactive in the database, this card is void.', 5, 21);
-    doc.text(`4. Verification URL: ${verificationUrl || 'https://verify.gue.edu.ng/v/' + staff.verificationToken}`, 5, 25);
-    doc.text(`5. Address: ${address}`, 5, 29);
-    doc.text(`6. Contact: ${settings?.phone || '+234 803 249 9451'} | ${settings?.email || 'info@gue.edu.ng'}`, 5, 33);
-    doc.text('7. Authorized Signatory: Director, GUE Educational Limited', 5, 37);
-
-    doc.setFont('helvetica', 'italic');
+    // Address
+    doc.setTextColor(20, 20, 20);
     doc.setFontSize(5);
-    doc.text(cardNotice, 42.8, 42, { align: 'center' });
-
-    doc.setFillColor(15, 58, 93);
-    doc.rect(0, 46, 85.6, 8, 'F');
-    doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(6);
-    doc.text('GUE EDUCATIONAL LIMITED - SKILLS TRAINING CENTRE', 42.8, 51, { align: 'center' });
+    doc.text('ADDRESS:', 5, 13.5);
+    doc.setFont('helvetica', 'normal');
+    doc.text(address, 5, 16.5, { maxWidth: 50 });
+
+    // Return policy
+    doc.setFont('helvetica', 'bold');
+    doc.text('RETURN POLICY:', 5, 22.5);
+    doc.setFont('helvetica', 'normal');
+    doc.text('If found, please return to GUE EDUCATIONAL LIMITED at the address above. This card is a property of GUE EDUCATIONAL LIMITED. It must be returned upon termination of employment. Unauthorized use or duplication is prohibited.\nFor enquiries: www.guevte.com / 08103769128', 5, 25.5, { maxWidth: 50, lineHeightFactor: 1.2 });
+
+    // QR Code on right
+    if (qrDataUrl) {
+      try {
+        doc.addImage(qrDataUrl, 'PNG', 58, 12, 22, 22);
+      } catch {
+        doc.rect(58, 12, 22, 22);
+      }
+    }
+    doc.setFontSize(5);
+    doc.setTextColor(100, 100, 100);
+    doc.text('Scan me!', 69, 36, { align: 'center' });
+
+    // Not transferable badge
+    doc.setFillColor(100, 116, 139);
+    doc.roundedRect(6, 38, 73.6, 3.5, 0.5, 0.5, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(4.5);
+    doc.setFont('helvetica', 'bold');
+    doc.text('NOT TRANSFERABLE. BEARER IS AUTHORIZED STAFF OF GUE EDUCATIONAL LIMITED', 42.8, 40.2, { align: 'center' });
+
+    // Valid
+    doc.setFontSize(5);
+    doc.setTextColor(30, 30, 30);
+    doc.text('----------------------- VALID -----------------------', 42.8, 45, { align: 'center' });
+
+    // Back Footer
+    doc.setFillColor(30, 58, 138);
+    doc.rect(0, 47, 85.6, 6.98, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(4.5);
+    doc.text(`📞 ${phone}   |   ✉️ ${email}   |   🌐 www.guevte.com`, 42.8, 51, { align: 'center' });
 
     doc.save(`${staff.staffId.replace(/\//g, '_')}_ID_Card.pdf`);
   };
@@ -149,24 +195,22 @@ export const IdCard: React.FC<IdCardProps> = ({
 
   return (
     <div className="flex flex-col items-center">
-      {/* Printable ID Card Container (Front & Back) */}
+      {/* Printable ID Card Container (Front & Back matching exact reference design) */}
       <div
         ref={cardRef}
         id="id-card-print-area"
         className="flex flex-col xl:flex-row items-center justify-center gap-8 print:flex-col print:gap-4 print:items-center print:justify-start"
       >
-        {/* CARD FRONT (Standard CR80 Ratio 85.6mm x 54mm) */}
+        {/* ==================== CARD FRONT ==================== */}
         <div
           id="id-card-front"
           className="relative w-[340px] sm:w-[380px] h-[220px] sm:h-[240px] rounded-xl shadow-xl overflow-hidden border border-slate-300 bg-white flex flex-col justify-between select-none print:shadow-none print:border print:border-black"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 50% 50%, #ffffff 0%, #f8fafc 100%)',
-          }}
         >
           {/* Top Header Banner */}
-          <div className="bg-[#0f3a5d] text-white px-3 py-2 flex items-center justify-between border-b-2 border-[#c59b27]">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center p-0.5 shadow-sm overflow-hidden flex-shrink-0 border border-amber-300/50">
+          <div className="bg-[#1e3a8a] text-white px-3 py-2 flex flex-col items-center relative border-b-2 border-red-600">
+            <div className="w-full flex items-center justify-between">
+              {/* Emblem / Logo Box */}
+              <div className="w-9 h-9 bg-white rounded-md flex items-center justify-center p-0.5 shadow border border-slate-200 overflow-hidden flex-shrink-0">
                 <img
                   src={settings?.logoUrl || '/gue_logo.jpg'}
                   alt="GUE Emblem"
@@ -174,180 +218,164 @@ export const IdCard: React.FC<IdCardProps> = ({
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="leading-tight">
-                <div className="text-[11px] sm:text-[12px] font-bold tracking-tight text-white uppercase font-sans">
+              {/* Organization Title */}
+              <div className="text-center flex-1 mx-2">
+                <div className="text-[12px] sm:text-[13px] font-extrabold tracking-tight text-white uppercase leading-none">
                   {orgName}
                 </div>
-                <div className="text-[7.5px] sm:text-[8.5px] text-amber-300 font-medium tracking-wide">
-                  Skills Training Centre • Wannune
+                <div className="text-[7.5px] sm:text-[8px] text-slate-200 font-medium italic mt-0.5">
+                  ... A subsidiary of Gue Group Limited
                 </div>
               </div>
+              <div className="w-9"></div> {/* spacing balance */}
             </div>
-            <div className="text-right">
-              <span className="inline-block bg-[#c59b27] text-slate-950 font-black text-[7px] sm:text-[8px] px-1.5 py-0.5 rounded uppercase tracking-wider">
-                Staff ID
-              </span>
+
+            {/* Motto Ribbon */}
+            <div className="mt-1 text-[7px] sm:text-[7.5px] font-bold text-amber-300 tracking-widest uppercase">
+              TRAINING • KNOWLEDGE • EMPOWERMENT
             </div>
           </div>
 
-          {/* Institutional Crest Watermark */}
-          <div className="absolute right-6 top-14 opacity-[0.06] pointer-events-none w-28 h-28 flex items-center justify-center">
-            <img
-              src={settings?.logoUrl || '/gue_logo.jpg'}
-              alt=""
-              className="w-full h-full object-contain"
-              referrerPolicy="no-referrer"
-            />
+          {/* Sub-header Pill */}
+          <div className="flex justify-center -mt-1 z-10">
+            <span className="bg-[#1e3a8a] text-white text-[8px] sm:text-[9px] font-extrabold px-4 py-0.5 rounded-md shadow uppercase tracking-wider border border-blue-400">
+              STAFF ID CARD
+            </span>
           </div>
 
           {/* Middle Body */}
-          <div className="px-3.5 py-2 flex items-center gap-3.5 flex-1">
-            {/* Staff Photo */}
+          <div className="px-3.5 py-1.5 flex items-center gap-3.5 flex-1">
+            {/* Passport Photo Box */}
             <div className="relative flex-shrink-0">
-              <div className="w-20 sm:w-24 h-24 sm:h-28 rounded-lg overflow-hidden border-2 border-[#0f3a5d] shadow-md bg-slate-100">
-                <img
-                  src={staff.photoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'}
-                  alt={`${staff.firstName} ${staff.lastName}`}
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <div className="absolute -bottom-1 -right-1 bg-emerald-600 text-white rounded-full p-0.5 shadow">
-                <CheckCircle className="w-3.5 h-3.5" />
-              </div>
-            </div>
-
-            {/* Staff Text Info */}
-            <div className="flex-1 min-w-0 flex flex-col justify-center">
-              <div className="text-[13px] sm:text-[14px] font-extrabold text-[#0f3a5d] leading-tight truncate">
-                {staff.firstName} {staff.middleName ? `${staff.middleName} ` : ''}{staff.lastName}
-              </div>
-              <div className="text-[10px] sm:text-[11px] font-semibold text-slate-700 mt-0.5 truncate">
-                {staff.designation}
-              </div>
-              <div className="text-[8.5px] sm:text-[9.5px] text-slate-500 font-medium truncate">
-                {staff.departmentName || 'General Administration'}
-              </div>
-
-              <div className="mt-2 pt-1 border-t border-slate-200 flex items-center justify-between">
-                <div>
-                  <div className="text-[7px] text-slate-400 font-bold uppercase tracking-wider">Staff ID Number</div>
-                  <div className="text-[11px] sm:text-[12px] font-mono font-bold text-[#0f3a5d]">
-                    {staff.staffId}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-[7px] text-slate-400 font-bold uppercase tracking-wider">Status</div>
-                  <span
-                    className={`inline-block text-[8px] font-bold px-1.5 py-0.5 rounded ${
-                      staff.employmentStatus === 'ACTIVE'
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : staff.employmentStatus === 'ON_LEAVE'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-rose-100 text-rose-800'
-                    }`}
-                  >
-                    {staff.employmentStatus}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* QR Code */}
-            <div className="flex flex-col items-center justify-center flex-shrink-0 pl-1">
-              <div className="w-16 sm:w-18 h-16 sm:h-18 p-1 bg-white border border-slate-300 rounded shadow-sm">
-                {qrDataUrl ? (
+              <div className="w-20 sm:w-24 h-24 sm:h-28 rounded-lg overflow-hidden border-2 border-dashed border-slate-400 shadow-sm bg-slate-100 flex flex-col items-center justify-center text-center p-1">
+                {staff.photoUrl ? (
                   <img
-                    src={qrDataUrl}
-                    alt="Staff Verification QR"
-                    className="w-full h-full object-contain"
+                    src={staff.photoUrl}
+                    alt={`${staff.firstName} ${staff.lastName}`}
+                    className="w-full h-full object-cover rounded"
+                    referrerPolicy="no-referrer"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-slate-400">
-                    <QrCode className="w-10 h-10" />
+                  <div className="text-slate-400 font-semibold text-[9px] uppercase tracking-wider leading-tight">
+                    PASSPORT PHOTO
                   </div>
                 )}
               </div>
-              <span className="text-[7px] font-mono font-bold text-slate-600 mt-1">
-                {staff.verificationToken || 'VERIFY'}
-              </span>
+            </div>
+
+            {/* Staff Details (Strictly matching reference layout) */}
+            <div className="flex-1 min-w-0 flex flex-col justify-center space-y-1">
+              <div>
+                <div className="text-[7px] sm:text-[7.5px] font-bold text-slate-500 uppercase tracking-tight">STAFF NAME:</div>
+                <div className="text-[12px] sm:text-[13px] font-extrabold text-[#1e3a8a] leading-tight truncate">
+                  {staff.firstName} {staff.middleName ? `${staff.middleName} ` : ''}{staff.lastName}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[7px] sm:text-[7.5px] font-bold text-slate-500 uppercase tracking-tight">STAFF ID:</div>
+                <div className="text-[10.5px] sm:text-[11.5px] font-mono font-bold text-slate-900">
+                  {staff.staffId}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[7px] sm:text-[7.5px] font-bold text-slate-500 uppercase tracking-tight">DEPARTMENT:</div>
+                <div className="text-[9px] sm:text-[10px] font-bold text-slate-800 truncate">
+                  {staff.departmentName || 'General Administration'}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[7px] sm:text-[7.5px] font-bold text-slate-500 uppercase tracking-tight">DESIGNATION:</div>
+                <div className="text-[9px] sm:text-[10px] font-semibold text-slate-700 truncate">
+                  {staff.designation || 'Staff'}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Bottom Security Footer */}
-          <div className="bg-slate-100 px-3 py-1 border-t border-slate-200 flex items-center justify-between text-[7.5px] sm:text-[8px] text-slate-600">
-            <div className="flex items-center space-x-1">
-              <ShieldCheck className="w-3 h-3 text-emerald-600" />
-              <span className="font-semibold">{rc} • {tin}</span>
-            </div>
-            <div className="font-medium text-slate-500">
-              Valid: Institutional Live DB
-            </div>
-          </div>
+          {/* Bottom Footer Bar */}
+          <div className="bg-[#1e3a8a] h-3.5 w-full"></div>
         </div>
 
-        {/* CARD BACK (CR80 Standard Back) */}
+        {/* ==================== CARD BACK ==================== */}
         <div
           id="id-card-back"
           className="relative w-[340px] sm:w-[380px] h-[220px] sm:h-[240px] rounded-xl shadow-xl overflow-hidden border border-slate-300 bg-white flex flex-col justify-between select-none print:shadow-none print:border print:border-black"
         >
           {/* Header */}
-          <div className="bg-[#0f3a5d] text-white px-3 py-1.5 flex items-center justify-between border-b-2 border-[#c59b27]">
-            <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-300">
-              Staff ID Verification & Terms
+          <div className="bg-[#1e3a8a] text-white px-3 py-2 flex items-center justify-center">
+            <div className="text-[11px] sm:text-[12px] font-black uppercase tracking-wider text-white">
+              COMPANY DETAILS
             </div>
-            <div className="text-[7px] text-slate-300 font-mono">SEC-GUE-2026</div>
           </div>
 
-          {/* Terms & Verification instructions */}
-          <div className="px-4 py-2.5 flex-1 flex flex-col justify-around text-slate-700 text-[8px] sm:text-[8.5px] leading-relaxed">
-            <div className="space-y-1">
-              <p className="font-medium">
-                • <strong className="text-slate-900">Verification Requirement:</strong> This identity card is property of <span className="font-bold text-[#0f3a5d]">{orgName}</span>. Scan the QR code or visit:
-              </p>
-              <div className="bg-slate-50 border border-slate-200 rounded px-2 py-1 text-center font-mono text-[8px] text-[#0f3a5d] font-bold">
-                {verificationUrl || `https://verify.gue.edu.ng/v/${staff.verificationToken || '...'}`}
-              </div>
-              <p>
-                • Physical card possession alone does not constitute valid authority. Only active status confirmed via the official verification system is recognized.
-              </p>
-              <p>
-                • <strong className="text-slate-900">Loss or Misuse:</strong> If found, please return to: <span className="text-slate-800">{address}</span>.
-              </p>
-            </div>
-
-            <div className="mt-1 pt-1.5 border-t border-slate-200 flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-7 h-7 rounded-full bg-slate-50 border border-slate-300 p-0.5 flex items-center justify-center overflow-hidden flex-shrink-0">
-                  <img
-                    src={settings?.logoUrl || '/gue_logo.jpg'}
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = '/gue_logo.jpg';
-                    }}
-                    alt="Official Seal"
-                    className="w-full h-full object-contain opacity-80"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
+          {/* Body Content */}
+          <div className="px-3.5 py-1.5 flex-1 flex flex-col justify-between text-[7.5px] sm:text-[8px] text-slate-800 leading-snug">
+            <div className="flex gap-2 items-start justify-between">
+              {/* Left Column: Address & Return Policy */}
+              <div className="flex-1 space-y-1.5">
                 <div>
-                  <div className="text-[7px] text-slate-400 uppercase font-bold">Authorized Signatory</div>
-                  <div className="font-serif italic font-bold text-slate-800 text-[10px] mt-0.5">
-                    Director
-                  </div>
-                  <div className="text-[6.5px] text-slate-500">GUE Educational Limited</div>
+                  <span className="font-extrabold text-[#1e3a8a] uppercase block text-[7.5px]">ADDRESS:</span>
+                  <p className="text-slate-700 text-[7px] sm:text-[7.5px] leading-tight">
+                    {address}
+                  </p>
+                </div>
+
+                <div>
+                  <span className="font-extrabold text-[#1e3a8a] uppercase block text-[7.5px]">RETURN POLICY:</span>
+                  <p className="text-slate-700 text-[6.5px] sm:text-[7px] leading-tight">
+                    If found, please return to GUE EDUCATIONAL LIMITED at the address above. This card is a property of GUE EDUCATIONAL LIMITED. It must be returned upon termination of employment. Unauthorized use or duplication is prohibited. For enquiries: www.guevte.com / 08103769128
+                  </p>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-[7px] text-slate-400 uppercase font-bold">Enquiries</div>
-                <div className="text-[7.5px] text-slate-700 font-semibold">{settings?.email || 'info@gue.edu.ng'}</div>
-                <div className="text-[7.5px] text-slate-700">{settings?.phone || '+234 803 249 9451'}</div>
+
+              {/* Right Column: QR Code */}
+              <div className="flex flex-col items-center flex-shrink-0 pl-1">
+                <div className="w-16 sm:w-18 h-16 sm:h-18 p-1 bg-white border border-slate-300 rounded shadow-sm">
+                  {qrDataUrl ? (
+                    <img
+                      src={qrDataUrl}
+                      alt="Verification QR"
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-400">
+                      <QrCode className="w-8 h-8" />
+                    </div>
+                  )}
+                </div>
+                <span className="text-[7px] font-bold text-slate-600 mt-0.5 flex items-center gap-0.5">
+                  👉 Scan me!
+                </span>
               </div>
+            </div>
+
+            {/* Authorization Notice Badge */}
+            <div className="bg-slate-600 text-white py-0.5 px-2 rounded text-center font-bold text-[7px] tracking-tight uppercase shadow-inner my-1">
+              NOT TRANSFERABLE . BEARER IS AUTHORIZED STAFF OF GUE EDUCATIONAL LIMITED
+            </div>
+
+            {/* Validity Line */}
+            <div className="text-[7.5px] font-bold text-slate-800 flex items-center justify-center gap-1.5 w-full">
+              <span className="text-slate-400 font-mono text-[7px] tracking-widest">----------------</span>
+              <span className="text-slate-900 font-extrabold uppercase px-1">VALID</span>
+              <span className="text-slate-400 font-mono text-[7px] tracking-widest">----------------</span>
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="bg-[#0f3a5d] text-white px-3 py-1 text-[7px] sm:text-[7.5px] text-center font-medium">
-            {cardNotice}
+          {/* Bottom Footer Contact */}
+          <div className="bg-[#1e3a8a] text-white px-2 py-1 flex items-center justify-around text-[7px] sm:text-[7.5px] font-medium">
+            <div className="flex items-center space-x-1">
+              <span>📞 {phone}</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <span>✉️ {email}</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <span>🌐 www.guevte.com</span>
+            </div>
           </div>
         </div>
       </div>
@@ -358,7 +386,7 @@ export const IdCard: React.FC<IdCardProps> = ({
           <button
             id="btn-print-id-card"
             onClick={handlePrint}
-            className="flex items-center space-x-2 bg-[#0f3a5d] hover:bg-[#164e7d] text-white font-medium text-sm px-4 py-2 rounded-lg shadow transition"
+            className="flex items-center space-x-2 bg-[#1e3a8a] hover:bg-blue-900 text-white font-medium text-sm px-4 py-2 rounded-lg shadow transition"
           >
             <Printer className="w-4 h-4" />
             <span>Print ID Card</span>
