@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
+import { Pool } from 'pg';
 import {
   User,
   Staff,
@@ -15,6 +16,20 @@ import {
   Role,
   EmploymentStatus,
 } from '../types/index.js';
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/gue_staff',
+  ssl:
+    process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
+});
+
+pool.on('error', (err) => {
+  console.error('[PostgreSQL] Unexpected pool error:', err);
+});
+
+export { pool };
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const DB_FILE = path.join(DATA_DIR, 'gue_system.json');

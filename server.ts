@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { apiRouter } from './src/server/api.js';
+import { pool } from './src/server/db.js';
 
 const appDir = typeof __dirname !== 'undefined' ? __dirname : process.cwd();
 
@@ -29,18 +30,35 @@ async function startServer() {
   app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
     next();
   });
 
-  // Health check endpoint
-  app.get('/api/health', (req, res) => {
-    res.json({
-      status: 'ok',
-      system: 'GUE Staff Management & ID Verification System',
-      institution: 'GUE EDUCATIONAL LIMITED',
-      centre: 'Skills Training Centre, Wannune',
-      timestamp: new Date().toISOString(),
-    });
+  // Health check endpoint with PostgreSQL verification
+  app.get('/api/health', async (req, res) => {
+    try {
+      const result = await pool.query('SELECT NOW()');
+      res.json({
+        status: 'ok',
+        database: 'connected',
+        system: 'GUE Staff Management & ID Verification System',
+        institution: 'GUE EDUCATIONAL LIMITED',
+        centre: 'Skills Training Centre, Wannune',
+        timestamp: new Date().toISOString(),
+        databaseTime: result.rows[0].now,
+      });
+    } catch (err) {
+      // Fallback if db is unseeded or offline during offline testing
+      res.json({
+        status: 'ok',
+        database: 'offline_or_unseeded',
+        system: 'GUE Staff Management & ID Verification System',
+        institution: 'GUE EDUCATIONAL LIMITED',
+        centre: 'Skills Training Centre, Wannune',
+        timestamp: new Date().toISOString(),
+      });
+    }
   });
 
   // Mount API router
